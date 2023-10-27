@@ -53,17 +53,17 @@ window.addEventListener('DOMContentLoaded', () => {
         const total = Date.parse(endtime) - Date.parse(new Date());
 
         days = total <= 0 ? 0 : Math.floor(total / (1000 * 60 * 60 * 24)),
-        hours = total <= 0 ? 0 : Math.floor((total / (1000 * 60 * 60) % 24)),
-        minutes = total <= 0 ? 0 : Math.floor((total / 1000 / 60) % 60),
-        seconds = total <= 0 ? 0 : Math.floor((total / 1000) % 60);
+            hours = total <= 0 ? 0 : Math.floor((total / (1000 * 60 * 60) % 24)),
+            minutes = total <= 0 ? 0 : Math.floor((total / 1000 / 60) % 60),
+            seconds = total <= 0 ? 0 : Math.floor((total / 1000) % 60);
 
-               
+
         return {
             total,
             days,
             hours,
             minutes,
-            seconds 
+            seconds
         };
     }
 
@@ -77,11 +77,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function setClock(selector, endtime) {
         const timer = document.querySelector(selector),
-              days = timer.querySelector('#days'),
-              hours = timer.querySelector('#hours'),
-              minutes = timer.querySelector('#minutes'),
-              seconds = timer.querySelector('#seconds')
-         
+            days = timer.querySelector('#days'),
+            hours = timer.querySelector('#hours'),
+            minutes = timer.querySelector('#minutes'),
+            seconds = timer.querySelector('#seconds')
+
         const timeInterval = setInterval(updateClock, 1000)
 
         updateClock();
@@ -94,19 +94,19 @@ window.addEventListener('DOMContentLoaded', () => {
             minutes.innerHTML = getZero(t.minutes);
             seconds.innerHTML = getZero(t.seconds);
 
-            if (t.total <=0) {
+            if (t.total <= 0) {
                 clearInterval(timeInterval);
             }
         }
     }
 
-    setClock('.timer', deadline); 
+    setClock('.timer', deadline);
 
     // Modal window
 
     const modalTrigger = document.querySelectorAll('[data-modal]'),
-          modal = document.querySelector('.modal'),
-          modalCloseBtn = document.querySelector('[data-close]');
+        modal = document.querySelector('.modal'),
+        modalCloseBtn = document.querySelector('[data-close]');
 
     function openModalWindow() {
         clearTimeout(modalTimerId);
@@ -116,12 +116,12 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function closeModalWindow() {
-        modal.classList.remove('show'); 
+        modal.classList.remove('show');
         modal.classList.add('hide');
         document.body.style.overflow = '';
     }
 
-    modalTrigger.forEach( (item) => {
+    modalTrigger.forEach((item) => {
         item.addEventListener('click', openModalWindow)
     });
 
@@ -139,10 +139,10 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const modalTimerId = setTimeout(openModalWindow, 6000);
+    //const modalTimerId = setTimeout(openModalWindow, 6000);
 
     function showModalByScroll() {
-        if ((window.scrollY + document.documentElement.clientHeight) >= (document.documentElement.scrollHeight - 1) ) {
+        if ((window.scrollY + document.documentElement.clientHeight) >= (document.documentElement.scrollHeight - 1)) {
             openModalWindow();
             window.removeEventListener('scroll', showModalByScroll);
         }
@@ -150,5 +150,66 @@ window.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', showModalByScroll);
 
+
+    // menu
+    class MenuItem {
+        constructor(src, alt, subtitle, description, price, parentSelector) {
+            this.src = src,
+                this.alt = alt,
+                this.subtitle = subtitle,
+                this.description = description,
+                this.price = price
+                this.parent = document.querySelector(parentSelector)
+        }
+
+        render() {
+            const cardElement = document.createElement('div');
+            cardElement.innerHTML = `
+                <div class="menu__item">
+                    <img src=${this.src} alt=${this.alt}>
+                        <h3 class="menu__item-subtitle">${this.subtitle}</h3>
+                        <div class="menu__item-descr"> ${this.description} </div>
+                        <div class="menu__item-divider"></div>
+                        <div class="menu__item-price">
+                            <div class="menu__item-cost">Price:</div>
+                            <div class="menu__item-total"><span>${this.price}</span> $/day </div>
+                        </div>
+                    </div>`
+            this.parent.append(cardElement)
+            
+        }
+    }
+
+    // create cards
+    const fitDescription = 'The "Fitness" menu is a new approach to cooking: more fresh vegetables and fruits. A product for active and healthy people. This is a completely new product with the best price and high quality!';
+    const eliteDescription = 'In the “Premium” menu we use not only beautiful packaging design, but also high-quality execution of dishes. Red fish, seafood, fruits - a restaurant menu without going to a restaurant!'
+    const vegyDescription = 'The “Vegetarian” menu is a careful selection of ingredients: a complete absence of animal products, milk from almonds, oats, coconut or buckwheat, the right amount of proteins from tofu and imported vegetarian steaks. '
+
+    new MenuItem(
+        'img/tabs/vegy.jpg', 
+        'vegy', 
+        'Menu "Fitness"', 
+        fitDescription, 
+        '22.99', 
+        '.menu .container')
+    .render();
+
+    new MenuItem(
+        'img/tabs/elite.jpg', 
+        'elite', 
+        'Menu "Premium"', 
+        eliteDescription, 
+        '55.99', 
+        '.menu .container')
+    .render();
+
+    new MenuItem(
+        'img/tabs/post.jpg', 
+        'vegy', 
+        'Menu "Vegetarian"', 
+        vegyDescription, 
+        '32.99', 
+        '.menu .container')
+    .render();
 
 })
