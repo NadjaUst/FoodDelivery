@@ -153,19 +153,26 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // menu
     class MenuItem {
-        constructor(src, alt, subtitle, description, price, parentSelector) {
+        constructor(src, alt, subtitle, description, price, parentSelector, ...classes) {
             this.src = src,
-                this.alt = alt,
-                this.subtitle = subtitle,
-                this.description = description,
-                this.price = price
-                this.parent = document.querySelector(parentSelector)
+            this.alt = alt,
+            this.subtitle = subtitle,
+            this.description = description,
+            this.price = price,
+            this.classes = classes,
+            this.parent = document.querySelector(parentSelector)
         }
 
         render() {
             const cardElement = document.createElement('div');
+            if (this.classes.length === 0) {
+                this.cardElement = 'menu__item';
+                cardElement.classList.add(this.cardElement);
+            } else {
+                this.classes.forEach(className => cardElement.classList.add(className));
+            }
+
             cardElement.innerHTML = `
-                <div class="menu__item">
                     <img src=${this.src} alt=${this.alt}>
                         <h3 class="menu__item-subtitle">${this.subtitle}</h3>
                         <div class="menu__item-descr"> ${this.description} </div>
@@ -173,8 +180,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         <div class="menu__item-price">
                             <div class="menu__item-cost">Price:</div>
                             <div class="menu__item-total"><span>${this.price}</span> $/day </div>
-                        </div>
-                    </div>`
+                        </div>`
             this.parent.append(cardElement)
             
         }
